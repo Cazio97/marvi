@@ -1,0 +1,60 @@
+from django.db import models
+
+# Create your models here.
+
+class Administrador(models.Model):
+    IdAdmi = models.AutoField(primary_key= True)
+    Contraseña = models.CharField(max_length=15)
+    Nombres = models.CharField(max_length=45)
+    ApellidoPaterno = models.CharField(max_length=45)
+    ApellidoMaterno = models.CharField(max_length=45)
+
+    def NombreAdministrador(self):
+        cadena = "{0} {1} {2}"
+        return cadena.format(self.ApellidoPaterno, self.ApellidoMaterno, self.Nombres)
+
+    def __str__(self):
+        return self.NombreAdministrador()
+
+class Encargado(models.Model):
+    IdEnc = models.AutoField(primary_key= True)
+    Contraseña = models.CharField(max_length=15)
+    Nombres = models.CharField(max_length=45)
+    ApellidoPaterno = models.CharField(max_length=45)
+    ApellidoMaterno = models.CharField(max_length=45)
+
+    def NombreEncargado(self):
+        cadena = "{0} {1} {2}"
+        return cadena.format(self.ApellidoPaterno, self.ApellidoMaterno, self.Nombres)
+
+    def __str__(self):
+        return self.NombreEncargado()
+
+class Producto(models.Model):
+    IdProducto = models.AutoField(primary_key=True)
+    Fecha = models.DateTimeField(auto_now_add=True)
+    CodigoQR = models.CharField(max_length=10)
+    Tipo = models.CharField(max_length=45)
+    NombreProducto = models.CharField(max_length=45)
+
+    def __str__(self):
+        return "{0} {1}".format(self.NombreProducto, self.Tipo, self.CodigoQR, self.Fecha)
+
+class Almacen(models.Model):
+    IdAlmacen= models.AutoField(primary_key=True)
+    Fecha = models.DateTimeField(auto_now_add=True)
+    Producto = models.ForeignKey(Producto,null=False, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{0} {1}".format(self.Producto, self.Fecha)
+
+class Formulario(models.Model):
+    IdFormulario= models.AutoField(primary_key=True)
+    Encargado = models.ForeignKey(Encargado, null=False, on_delete=models.CASCADE)
+    Prod = models.ForeignKey(Producto, null=False, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{0} - {1}, {2}".format(self.Prod, self.Encargado, self.IdFormulario)
+
+
+
